@@ -1,12 +1,9 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <div v-for="question in questions">
-      {{question.question}} {{question.outcome}}
-    </div>
-    <div v-for="participant in participants">
-      {{participant.name}}
-    </div>
+    <Predictions
+        v-bind:questions="questions"
+        v-bind:participants="participants"/>
   </div>
 </template>
 
@@ -14,6 +11,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { firebaseConfig } from '../environments/firebase';
 import HelloWorld from './components/HelloWorld.vue';
+import Predictions from './components/Predictions.vue';
 
 import Firebase from 'firebase';
 
@@ -33,6 +31,7 @@ firestore.settings(settings);
   },
   components: {
     HelloWorld,
+    Predictions,
   },
   firestore: {
     questions: firestore.collection('questions'),
