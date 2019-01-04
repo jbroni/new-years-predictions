@@ -13,7 +13,10 @@
         <td>{{ question.question }}</td>
         <td>{{ question.outcome }}</td>
         <td v-for="participant in participants">
-          {{ participant.predictions[index] }}
+          <Answer
+            v-bind:outcome="question.outcome"
+            v-bind:answer="participant.predictions[index]"
+          />
         </td>
       </tr>
     </table>
@@ -21,11 +24,16 @@
 </template>
 
 <script lang="ts">
+import Answer from '@/components/answers/Answer.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({
+  components: {
+    Answer
+  }
+})
 export default class Predictions extends Vue {
   @Prop() private questions!: Question[];
   @Prop() private participants!: Participant[];
