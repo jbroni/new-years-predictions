@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
     <Predictions
       v-bind:questions="questions"
       v-bind:participants="participants"
