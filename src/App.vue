@@ -1,9 +1,10 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <img alt="Vue logo" src="./assets/logo.png" />
     <Predictions
-        v-bind:questions="questions"
-        v-bind:participants="participants"/>
+      v-bind:questions="questions"
+      v-bind:participants="participants"
+    />
   </div>
 </template>
 
@@ -25,16 +26,16 @@ firestore.settings(settings);
   data: () => {
     return {
       questions: [],
-      participants: [],
+      participants: []
     };
   },
   components: {
-    Predictions,
+    Predictions
   },
   firestore: {
     questions: firestore.collection('questions'),
-    participants: firestore.collection('participants'),
-  },
+    participants: firestore.collection('participants')
+  }
 })
 export default class App extends Vue {}
 </script>
