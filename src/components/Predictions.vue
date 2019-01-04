@@ -1,12 +1,19 @@
 <template>
   <div class="predictions">
-    <h1>Predictions</h1>
+    <h1>Nyt&aring;rsforudsigelser for 2019</h1>
 
-    <div v-for="question in questions">
-      {{ question.question }} {{ question.outcome }}
-    </div>
-
-    <div v-for="participant in participants">{{ participant.name }}</div>
+    <table>
+      <th>Sp&oslash;rgsm&aring;l</th>
+      <th>Udfald</th>
+      <th v-for="participant in participants">{{ participant.name }}</th>
+      <tr v-for="(question, index) in questions">
+        <td>{{ index + 1 }}: {{ question.question }}</td>
+        <td>{{ question.outcome }}</td>
+        <td v-for="participant in participants">
+          {{ participant.predictions[index] }}
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
