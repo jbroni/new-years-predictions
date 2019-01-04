@@ -10,7 +10,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { firebaseConfig } from '../environments/firebase';
-import HelloWorld from './components/HelloWorld.vue';
 import Predictions from './components/Predictions.vue';
 
 import Firebase from 'firebase';
@@ -30,7 +29,6 @@ firestore.settings(settings);
     };
   },
   components: {
-    HelloWorld,
     Predictions,
   },
   firestore: {
