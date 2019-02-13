@@ -3,30 +3,32 @@
     <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
     <h1>Nyt&aring;rsforudsigelser for 2019</h1>
 
-    <div class="participant-picker">
-      <span class="participant-picker-label">Vis svar for:</span>
-      <v-select v-model="selectedParticipant" label="name" :options="participants"></v-select>
-    </div>
+    <div class="results-container">
+      <div class="participant-picker">
+        <span class="participant-picker-label">Vis svar for:</span>
+        <v-select v-model="selectedParticipant" label="name" :options="participants"></v-select>
+      </div>
 
-    <table>
-      <th></th>
-      <th>Sp&oslash;rgsm&aring;l</th>
-      <th>Udfald</th>
-      <th v-for="participant in displayedParticipants">{{ participant.name }}</th>
-      <tr v-for="(question, index) in questions">
-        <td class="index">{{ index + 1 }}.</td>
-        <td>{{ question.question }}</td>
-        <td>
-          <Outcome v-bind:outcome="question.outcome" />
-        </td>
-        <td v-for="participant in displayedParticipants">
-          <Answer
-            v-bind:outcome="question.outcome"
-            v-bind:answer="participant.predictions[index]"
-          />
-        </td>
-      </tr>
-    </table>
+      <table>
+        <th></th>
+        <th>Sp&oslash;rgsm&aring;l</th>
+        <th>Udfald</th>
+        <th v-for="participant in displayedParticipants">{{ participant.name }}</th>
+        <tr v-for="(question, index) in questions">
+          <td class="index">{{ index + 1 }}.</td>
+          <td>{{ question.question }}</td>
+          <td>
+            <Outcome v-bind:outcome="question.outcome" />
+          </td>
+          <td v-for="participant in displayedParticipants">
+            <Answer
+                v-bind:outcome="question.outcome"
+                v-bind:answer="participant.predictions[index]"
+            />
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -74,10 +76,18 @@ h1 {
   margin-top: -10px;
 }
 
+.results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .participant-picker {
   display: flex;
   align-items: center;
   padding-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
 }
 
 .participant-picker-label {
