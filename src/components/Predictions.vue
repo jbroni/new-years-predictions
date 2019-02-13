@@ -16,7 +16,9 @@
       <tr v-for="(question, index) in questions">
         <td class="index">{{ index + 1 }}.</td>
         <td>{{ question.question }}</td>
-        <td>{{ question.outcome }}</td>
+        <td>
+          <Outcome v-bind:outcome="question.outcome" />
+        </td>
         <td v-for="participant in displayedParticipants">
           <Answer
             v-bind:outcome="question.outcome"
@@ -30,6 +32,7 @@
 
 <script lang="ts">
 import Answer from '@/components/answers/Answer.vue';
+import Outcome from '@/components/outcomes/Outcome.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
@@ -37,6 +40,7 @@ import * as _ from 'lodash';
 
 @Component({
   components: {
+    Outcome,
     Answer
   }
 })
