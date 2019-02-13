@@ -13,9 +13,10 @@ import { firebaseConfig } from '../environments/firebase';
 import Predictions from './components/Predictions.vue';
 import vSelect from 'vue-select'
 
-import Firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
-const firebaseApp = Firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 const firestore = firebaseApp.firestore();
 const settings = {
   timestampsInSnapshots: true
