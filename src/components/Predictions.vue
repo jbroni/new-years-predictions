@@ -3,6 +3,8 @@
     <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
     <h1>Nyt&aring;rsforudsigelser for 2019</h1>
 
+    <v-select v-model="selectedParticipant" label="name" :options="participants"></v-select>
+
     <table>
       <th></th>
       <th>Sp&oslash;rgsm&aring;l</th>
@@ -27,7 +29,8 @@
 import Answer from '@/components/answers/Answer.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -37,6 +40,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class Predictions extends Vue {
   @Prop() private questions!: Question[];
   @Prop() private participants!: Participant[];
+  // Reactive properties must be initialized. undefined does not work as initialization.
+  private selectedParticipant: Participant | null = null;
+
+  @Watch('participants') public onParticipantsChanged(): void {
+    if (!this.selectedParticipant) {
+      this.selectedParticipant = _.first(this.participants) || null;
+    }
+  }
 }
 </script>
 

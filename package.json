@@ -10,10 +10,13 @@
     "test": "prettier --list-different 'src/**/*.{ts,vue}'"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.120",
     "firebase": "^5.7.2",
+    "lodash": "^4.17.11",
     "vue": "^2.5.21",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
+    "vue-select": "^2.5.1",
     "vuefire": "^2.0.0-alpha.20"
   },
   "devDependencies": {

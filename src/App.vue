@@ -11,6 +11,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { firebaseConfig } from '../environments/firebase';
 import Predictions from './components/Predictions.vue';
+import vSelect from 'vue-select'
 
 import Firebase from 'firebase';
 
@@ -20,6 +21,8 @@ const settings = {
   timestampsInSnapshots: true
 };
 firestore.settings(settings);
+
+Vue.component('v-select', vSelect);
 
 @Component({
   data: () => {
