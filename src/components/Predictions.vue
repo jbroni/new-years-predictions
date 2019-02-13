@@ -6,7 +6,7 @@
     <div class="results-container">
       <div class="participant-picker">
         <span class="participant-picker-label">Vis svar for:</span>
-        <v-select v-model="selectedParticipant" label="name" :options="participants"></v-select>
+        <v-select v-model="selectedParticipant" label="name" :options="participants" :searchable="false"></v-select>
       </div>
 
       <table>
