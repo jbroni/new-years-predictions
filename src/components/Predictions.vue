@@ -3,7 +3,10 @@
     <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
     <h1>Nyt&aring;rsforudsigelser for 2019</h1>
 
-    <v-select v-model="selectedParticipant" label="name" :options="participants"></v-select>
+    <div class="participant-picker">
+      <span class="participant-picker-label">Vis svar for:</span>
+      <v-select v-model="selectedParticipant" label="name" :options="participants"></v-select>
+    </div>
 
     <table>
       <th></th>
@@ -65,6 +68,20 @@ h1 {
   font-size: 24px;
   font-weight: bold;
   margin-top: -10px;
+}
+
+.participant-picker {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.participant-picker-label {
+  padding-right: 10px;
+}
+
+.participant-picker .dropdown.v-select {
+  flex: 1;
 }
 
 table {
