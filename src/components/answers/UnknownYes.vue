@@ -1,6 +1,6 @@
 <template>
   <img
-    alt="Yes (unknown)"
+    alt="Ja (endnu ikke afgjort)"
     class="answer"
     src="../../assets/yes-dark-grey.png"
   />

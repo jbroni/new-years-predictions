@@ -1,5 +1,5 @@
 <template>
-  <img alt="No (correct)" class="answer" src="../../assets/no-green.png" />
+  <img alt="Nej (rigtigt)" class="answer" src="../../assets/no-green.png" />
 </template>
 
 <script lang="ts">

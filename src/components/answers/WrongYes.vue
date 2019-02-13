@@ -1,5 +1,5 @@
 <template>
-  <img alt="Yes (wrong)" class="answer" src="../../assets/yes-red.png" />
+  <img alt="Ja (forkert)" class="answer" src="../../assets/yes-red.png" />
 </template>
 
 <script lang="ts">
