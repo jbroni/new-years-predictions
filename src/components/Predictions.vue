@@ -9,12 +9,12 @@
       <th></th>
       <th>Sp&oslash;rgsm&aring;l</th>
       <th>Udfald</th>
-      <th v-for="participant in participants">{{ participant.name }}</th>
+      <th v-for="participant in displayedParticipants">{{ participant.name }}</th>
       <tr v-for="(question, index) in questions">
         <td class="index">{{ index + 1 }}.</td>
         <td>{{ question.question }}</td>
         <td>{{ question.outcome }}</td>
-        <td v-for="participant in participants">
+        <td v-for="participant in displayedParticipants">
           <Answer
             v-bind:outcome="question.outcome"
             v-bind:answer="participant.predictions[index]"
@@ -47,6 +47,15 @@ export default class Predictions extends Vue {
     if (!this.selectedParticipant) {
       this.selectedParticipant = _.first(this.participants) || null;
     }
+  }
+
+  /**
+   * Participants that should be shown in table.
+   * Either the selected participant from the drop down
+   * or all participants if selection is empty.
+   */
+  public get displayedParticipants(): Participant[] {
+    return this.selectedParticipant ? [this.selectedParticipant] : this.participants;
   }
 }
 </script>
