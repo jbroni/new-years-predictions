@@ -6,24 +6,29 @@
     <div class="results-container">
       <div class="participant-picker">
         <span class="participant-picker-label">Vis svar for:</span>
-        <v-select v-model="selectedParticipant" label="name" :options="participants" :searchable="false"></v-select>
+        <v-select
+          v-model="selectedParticipant"
+          label="name"
+          :options="participants"
+          :searchable="false"
+        ></v-select>
       </div>
 
       <table>
         <th></th>
         <th>Sp&oslash;rgsm&aring;l</th>
         <th>Udfald</th>
-        <th v-for="participant in displayedParticipants">{{ participant.name }}</th>
+        <th v-for="participant in displayedParticipants">
+          {{ participant.name }}
+        </th>
         <tr v-for="(question, index) in questions">
           <td class="index">{{ index + 1 }}.</td>
           <td>{{ question.question }}</td>
-          <td>
-            <Outcome v-bind:outcome="question.outcome" />
-          </td>
+          <td><Outcome v-bind:outcome="question.outcome" /></td>
           <td v-for="participant in displayedParticipants">
             <Answer
-                v-bind:outcome="question.outcome"
-                v-bind:answer="participant.predictions[index]"
+              v-bind:outcome="question.outcome"
+              v-bind:answer="participant.predictions[index]"
             />
           </td>
         </tr>
@@ -64,7 +69,9 @@ export default class Predictions extends Vue {
    * or all participants if selection is empty.
    */
   public get displayedParticipants(): Participant[] {
-    return this.selectedParticipant ? [this.selectedParticipant] : this.participants;
+    return this.selectedParticipant
+      ? [this.selectedParticipant]
+      : this.participants;
   }
 }
 </script>
@@ -96,6 +103,10 @@ h1 {
 
 .participant-picker .dropdown.v-select {
   flex: 1;
+}
+
+.v-select .dropdown-toggle .clear {
+  margin-top: 5px;
 }
 
 table {
