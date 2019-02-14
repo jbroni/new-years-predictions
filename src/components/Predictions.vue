@@ -65,7 +65,7 @@ import Outcome from '@/components/outcomes/Outcome.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import * as _ from 'lodash';
+import { first } from 'lodash';
 
 @Component({
   components: {
@@ -81,7 +81,7 @@ export default class Predictions extends Vue {
 
   @Watch('participants') public onParticipantsChanged(): void {
     if (!this.selectedParticipant) {
-      this.selectedParticipant = _.first(this.participants) || null;
+      this.selectedParticipant = first(this.participants) || null;
     }
   }
 
