@@ -1,5 +1,9 @@
 <template>
-  <img alt="Nej (endnu ikke afgjort)" class="answer" src="../../assets/no-dark-grey.png" />
+  <img
+    alt="Nej (endnu ikke afgjort)"
+    class="answer"
+    src="../../assets/no-dark-grey.png"
+  />
 </template>
 
 <script lang="ts">

@@ -11,7 +11,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { firebaseConfig } from '../environments/firebase';
 import Predictions from './components/Predictions.vue';
-import vSelect from 'vue-select'
+import vSelect from 'vue-select';
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';

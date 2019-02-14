@@ -55,8 +55,14 @@ export default class Answer extends Vue {
 </script>
 
 <style lang="scss">
+div.answer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 img.answer {
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
 }
 </style>
