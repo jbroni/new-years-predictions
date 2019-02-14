@@ -175,10 +175,6 @@ h1 {
   flex: 1;
 }
 
-.v-select .dropdown-toggle .clear {
-  margin-top: 5px;
-}
-
 table {
   border-spacing: 0;
 }
