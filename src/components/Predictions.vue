@@ -178,12 +178,13 @@ th {
 }
 
 td {
-  padding: 5px 0 5px 0;
+  padding: 5px 5px 5px 0;
 }
 
 .index {
   text-align: right;
   font-weight: 600;
+  padding-left: 5px;
 }
 
 tr:nth-child(even) {
