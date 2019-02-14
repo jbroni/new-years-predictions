@@ -1,12 +1,12 @@
 <template>
-  <img alt="Nej (rigtigt)" class="answer" src="../../assets/no-green.png" />
+  <img alt="Forkert" class="answer" src="../../assets/wrong.png" />
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class CorrectNo extends Vue {}
+export default class Wrong extends Vue {}
 </script>
 
 <style lang="scss"></style>

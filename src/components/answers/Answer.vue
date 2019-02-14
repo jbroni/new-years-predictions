@@ -1,31 +1,25 @@
 <template>
   <div class="answer">
-    <CorrectNo v-if="isNo() && isCorrect()" />
-    <CorrectYes v-if="isYes() && isCorrect()" />
+    <Correct v-if="isCorrect()" />
     <UnknownNo v-if="isNo() && isUnknown()" />
     <UnknownYes v-if="isYes() && isUnknown()" />
-    <WrongNo v-if="isNo() && isWrong()" />
-    <WrongYes v-if="isYes() && isWrong()" />
+    <Wrong v-if="isWrong()" />
   </div>
 </template>
 
 <script lang="ts">
-import CorrectNo from '@/components/answers/CorrectNo.vue';
-import CorrectYes from '@/components/answers/CorrectYes.vue';
+import Correct from '@/components/answers/Correct.vue';
 import UnknownNo from '@/components/answers/UnknownNo.vue';
 import UnknownYes from '@/components/answers/UnknownYes.vue';
-import WrongNo from '@/components/answers/WrongNo.vue';
-import WrongYes from '@/components/answers/WrongYes.vue';
+import Wrong from '@/components/answers/Wrong.vue';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
-    CorrectNo,
-    CorrectYes,
+    Correct,
     UnknownNo,
     UnknownYes,
-    WrongNo,
-    WrongYes
+    Wrong
   }
 })
 export default class Answer extends Vue {

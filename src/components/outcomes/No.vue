@@ -1,5 +1,5 @@
 <template>
-  <img alt="Nej" class="outcome" src="../../assets/no-dark-grey.png" />
+  <span>Nej</span>
 </template>
 
 <script lang="ts">
