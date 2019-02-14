@@ -3,6 +3,17 @@
     <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
     <h1>Nyt&aring;rsforudsigelser for 2019</h1>
 
+    <div class="scoreboard-container">
+      <table>
+        <th>Navn</th>
+        <th>Rigtige svar</th>
+        <tr v-for="participant in participantsSortedByBest">
+          <td class="participant-name">{{ participant.name }}</td>
+          <td>{{ correctAnswers(participant) }}</td>
+        </tr>
+      </table>
+    </div>
+
     <div class="results-container">
       <div class="participant-picker">
         <span class="participant-picker-label">Vis svar for:</span>
@@ -85,6 +96,15 @@ export default class Predictions extends Vue {
       : this.participants;
   }
 
+  public get participantsSortedByBest(): Participant[] {
+    if (!this.participants) {
+      return [];
+    }
+    return this.participants.sort((a, b) => {
+      return this.correctAnswers(b) - this.correctAnswers(a);
+    });
+  }
+
   public get determinedOutcome(): number {
     return this.questions
       ? this.questions.filter(question => question.outcome !== -1).length
@@ -111,10 +131,15 @@ h1 {
   margin-top: -10px;
 }
 
-.results-container {
+.results-container,
+.scoreboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.scoreboard-container {
+  padding-bottom: 30px;
 }
 
 .participant-picker {
@@ -139,6 +164,10 @@ h1 {
 
 table {
   border-spacing: 0;
+}
+
+th {
+  border-bottom: rgba(0, 0, 0, 0.11) solid 1px;
 }
 
 .participant-name,
