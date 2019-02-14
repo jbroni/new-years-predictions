@@ -35,6 +35,14 @@
             />
           </td>
         </tr>
+        <tr class="total">
+          <td></td>
+          <td></td>
+          <td class="result">{{ determinedOutcome }}</td>
+          <td v-for="participant in displayedParticipants" class="result">
+            {{ correctAnswers(participant) }}
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -75,6 +83,23 @@ export default class Predictions extends Vue {
     return this.selectedParticipant
       ? [this.selectedParticipant]
       : this.participants;
+  }
+
+  public get determinedOutcome(): number {
+    return this.questions
+      ? this.questions.filter(question => question.outcome !== -1).length
+      : 0;
+  }
+
+  public correctAnswers(participant: Participant): number {
+    if (!this.questions) {
+      return 0;
+    }
+    return participant.predictions.filter((prediction, index) =>
+      prediction
+        ? this.questions[index].outcome === 1
+        : this.questions[index].outcome === 0
+    ).length;
   }
 }
 </script>
@@ -134,5 +159,13 @@ td {
 
 tr:nth-child(even) {
   background: rgba(0, 0, 0, 0.11);
+}
+
+.total {
+  font-weight: 600;
+}
+
+.total .result {
+  border-top: black solid 1px;
 }
 </style>
