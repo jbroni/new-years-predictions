@@ -17,8 +17,11 @@
       <table>
         <th></th>
         <th>Sp&oslash;rgsm&aring;l</th>
-        <th>Udfald</th>
-        <th v-for="participant in displayedParticipants">
+        <th class="outcome-header">Udfald</th>
+        <th
+          v-for="participant in displayedParticipants"
+          class="participant-name"
+        >
           {{ participant.name }}
         </th>
         <tr v-for="(question, index) in questions">
@@ -113,8 +116,15 @@ table {
   border-spacing: 0;
 }
 
+.participant-name,
+.outcome-header {
+  width: 75px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 td {
-  padding-right: 5px;
+  padding: 5px 0 5px 0;
 }
 
 .index {
