@@ -22,6 +22,7 @@
           label="name"
           :options="participants"
           :searchable="false"
+          :on-change="participantChanged"
         ></v-select>
       </div>
 
@@ -65,7 +66,7 @@ import Outcome from '@/components/outcomes/Outcome.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { first } from 'lodash';
+import { first, find } from 'lodash';
 
 @Component({
   components: {
@@ -78,10 +79,19 @@ export default class Predictions extends Vue {
   @Prop() private participants!: Participant[];
   // Reactive properties must be initialized. undefined does not work as initialization.
   private selectedParticipant: Participant | null = null;
+  private selectedParticipantKey = 'selectedParticipant';
 
   @Watch('participants') public onParticipantsChanged(): void {
     if (!this.selectedParticipant) {
-      this.selectedParticipant = first(this.participants) || null;
+      const participantId = window.localStorage.getItem(
+        this.selectedParticipantKey
+      );
+      const participant = find(this.participants, {
+        id: participantId
+      }) as Participant | undefined;
+
+      this.selectedParticipant =
+        participant || first(this.participants) || null;
     }
   }
 
@@ -100,7 +110,7 @@ export default class Predictions extends Vue {
     if (!this.participants) {
       return [];
     }
-    return this.participants.sort((a, b) => {
+    return [...this.participants].sort((a, b) => {
       return this.correctAnswers(b) - this.correctAnswers(a);
     });
   }
@@ -120,6 +130,13 @@ export default class Predictions extends Vue {
         ? this.questions[index].outcome === 1
         : this.questions[index].outcome === 0
     ).length;
+  }
+
+  public participantChanged(participant: Participant | undefined): void {
+    if (participant) {
+      window.localStorage.setItem(this.selectedParticipantKey, participant.id);
+    }
+    this.selectedParticipant = participant || null;
   }
 }
 </script>
