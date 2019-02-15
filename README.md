@@ -1,8 +1,22 @@
-# new-years-predictions
+# New Years Predictions
+_Note: Project is in Danish._
+
+Simple webapp to display results from a quiz attempting to predict the outcome of 25 events in 2019.
+
+The main purpose of the project was to get a chance to play around with Vue and Firebase.
+As such there are many things that could definitely be improved upon like
+* Adding tests
+* Adding CI
+* Adding an interface to input the answers instead of using the Firebase console
+* Improve component separation
+* Moving CSS to separate files and cleaning it up
+* Dynamically loading language specific strings
+* Better error handling
+* ... and much more
 
 ## Project setup
 ```
-npm install
+npm ci
 ```
 
 ### Compiles and hot-reloads for development
@@ -15,15 +29,7 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
+### Deploys to firebase
 ```
-npm run test
+firebase deploy
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
