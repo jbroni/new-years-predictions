@@ -153,6 +153,7 @@ export default class Predictions extends Vue {
 .participant-picker {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding-bottom: 20px;
   width: 100%;
   max-width: 500px;
