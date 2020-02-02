@@ -1,49 +1,36 @@
 <template>
-  <div id="app">
-    <Predictions
-      v-bind:questions="questions"
-      v-bind:participants="participants"
-    />
-  </div>
+  <div id="app"><YearPicker v-bind:years="years" /></div>
 </template>
 
 <script lang="ts">
+import YearPicker from '@/components/YearPicker.vue';
+import { db } from '@/db';
 import { Component, Vue } from 'vue-property-decorator';
-import { firebaseConfig } from '../environments/firebase';
-import Predictions from './components/Predictions.vue';
 import vSelect from 'vue-select';
 
-import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const firestore = firebaseApp.firestore();
-const settings = {
-  timestampsInSnapshots: true
-};
-firestore.settings(settings);
 
 Vue.component('v-select', vSelect);
 
 @Component({
   data: () => {
     return {
-      questions: [],
-      participants: []
+      years: []
     };
   },
   components: {
-    Predictions
+    YearPicker
   },
   firestore: {
-    questions: firestore.collection('questions'),
-    participants: firestore.collection('participants')
+    years: db.collection('years')
   }
 })
 export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+@import '~vue-select/src/scss/vue-select.scss';
+
 html {
   background: rgba(0, 0, 0, 0.07);
 }
