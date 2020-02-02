@@ -27,7 +27,7 @@ const years = db.collection('years');
     Predictions
   },
   firestore: {
-    years: years
+    years
   },
   watch: {
     id: {
@@ -39,7 +39,7 @@ const years = db.collection('years');
     }
   }
 })
-export default class Year extends Vue {
+export default class YearComponent extends Vue {
   @Prop() private id!: string;
 }
 </script>

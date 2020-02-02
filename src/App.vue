@@ -1,9 +1,10 @@
 <template>
-  <div id="app"><Year v-bind:id="'2020'" /></div>
+  <div id="app"><YearPicker v-bind:years="years" /></div>
 </template>
 
 <script lang="ts">
-import Year from '@/components/Year.vue';
+import YearComponent from '@/components/Year.vue';
+import YearPicker from '@/components/YearPicker.vue';
 import { db } from '@/db';
 import { Component, Vue } from 'vue-property-decorator';
 import Predictions from './components/Predictions.vue';
@@ -16,12 +17,12 @@ Vue.component('v-select', vSelect);
 @Component({
   data: () => {
     return {
-      questions: [],
-      participants: []
+      years: []
     };
   },
   components: {
-    Year: Year,
+    YearPicker,
+    Year: YearComponent,
     Predictions
   },
   firestore: {
