@@ -3,11 +3,9 @@
 </template>
 
 <script lang="ts">
-import YearComponent from '@/components/Year.vue';
 import YearPicker from '@/components/YearPicker.vue';
 import { db } from '@/db';
 import { Component, Vue } from 'vue-property-decorator';
-import Predictions from './components/Predictions.vue';
 import vSelect from 'vue-select';
 
 import 'firebase/firestore';
@@ -21,9 +19,7 @@ Vue.component('v-select', vSelect);
     };
   },
   components: {
-    YearPicker,
-    Year: YearComponent,
-    Predictions
+    YearPicker
   },
   firestore: {
     years: db.collection('years')

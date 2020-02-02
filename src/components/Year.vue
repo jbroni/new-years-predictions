@@ -43,5 +43,3 @@ export default class YearComponent extends Vue {
   @Prop() private id!: string;
 }
 </script>
-
-<style scoped></style>
