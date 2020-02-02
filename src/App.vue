@@ -33,6 +33,8 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+@import '~vue-select/src/scss/vue-select.scss';
+
 html {
   background: rgba(0, 0, 0, 0.07);
 }
