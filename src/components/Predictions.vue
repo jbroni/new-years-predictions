@@ -1,8 +1,5 @@
 <template>
   <div class="predictions">
-    <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
-    <h1>Nyt&aring;rsforudsigelser for 2019</h1>
-
     <div class="scoreboard-container">
       <table>
         <th>Navn</th>
@@ -142,12 +139,6 @@ export default class Predictions extends Vue {
 </script>
 
 <style lang="scss">
-h1 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: -10px;
-}
-
 .results-container,
 .scoreboard-container {
   display: flex;

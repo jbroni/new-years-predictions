@@ -1,12 +1,20 @@
 <template>
   <div id="year-picker" v-if="years.length > 0">
-    <v-select
-      v-model="selectedYear"
-      label="id"
-      :options="years"
-      :searchable="false"
-      :clearable="false"
-    ></v-select>
+    <div class="header">
+      <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
+      <h1>Nyt&aring;rsforudsigelser for</h1>
+
+      <div class="picker-wrapper">
+        <v-select
+          v-model="selectedYear"
+          label="id"
+          :options="years"
+          :searchable="false"
+          :clearable="false"
+          class="picker"
+        ></v-select>
+      </div>
+    </div>
 
     <Year v-bind:id="selectedYear.id" v-if="selectedYear" />
   </div>
@@ -33,4 +41,19 @@ export default class YearPicker extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss">
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+.header {
+  padding-bottom: 20px;
+
+  .picker-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+}
+</style>
