@@ -63,7 +63,7 @@ import Outcome from '@/components/outcomes/Outcome.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { first, find } from 'lodash';
+import { first, find, isEmpty } from 'lodash';
 
 @Component({
   components: {
@@ -119,7 +119,7 @@ export default class Predictions extends Vue {
   }
 
   public correctAnswers(participant: Participant): number {
-    if (!this.questions) {
+    if (isEmpty(this.questions)) {
       return 0;
     }
     return participant.predictions.filter((prediction, index) =>
