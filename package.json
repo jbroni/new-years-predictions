@@ -17,7 +17,7 @@
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
     "vue-select": "^2.5.1",
-    "vuefire": "^2.0.0-alpha.20"
+    "vuefire": "^2.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",
