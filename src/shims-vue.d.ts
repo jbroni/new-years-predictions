@@ -4,3 +4,4 @@ declare module '*.vue' {
 }
 
 declare module 'vue-select';
+declare module 'vue-burger-menu';
