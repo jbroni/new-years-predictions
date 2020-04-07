@@ -2,7 +2,7 @@
   <div id="year-selector" v-if="years.length > 0">
     <div class="header">
       <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
-      <h1>Nyt&aring;rsforudsigelser for {{ selectedYear.id }}</h1>
+      <h1>{{ title }}</h1>
     </div>
 
     <Year v-bind:id="selectedYear.id" v-if="selectedYear" />
@@ -19,6 +19,7 @@ import YearComponent from './Year.vue';
 })
 export default class YearSelector extends Vue {
   public selectedYear: Year | null = null;
+  public title: string = 'Nytårsforudsigelser';
 
   @Prop() private years!: Year[];
 
@@ -35,6 +36,9 @@ export default class YearSelector extends Vue {
       this.selectedYear =
         this.years.find(year => year.id === this.$route.params.year) ||
         this.years[this.years.length - 1];
+
+      this.title = `Nytårsforudsigelser for ${this.selectedYear.id}`;
+      document.title = this.title;
     }
   }
 }
