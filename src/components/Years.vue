@@ -1,8 +1,12 @@
 <template>
-  <div id="years"><YearSelector v-bind:years="years"></YearSelector></div>
+  <div id="years">
+    <Navigation></Navigation>
+    <YearSelector v-bind:years="years"></YearSelector>
+  </div>
 </template>
 
 <script lang="ts">
+import Navigation from '@/components/Navigation.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import { db } from '@/db';
 import { Component, Vue } from 'vue-property-decorator';
@@ -19,6 +23,7 @@ Vue.component('v-select', vSelect);
     };
   },
   components: {
+    Navigation,
     YearSelector
   },
   firestore: {
