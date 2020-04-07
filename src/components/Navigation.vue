@@ -2,14 +2,16 @@
   <div id="navigation">
     <Slide :closeOnNavigation="true" noOverlay>
       <h1>&Aring;r</h1>
-      <a href="#/years/2019"> <span>2019</span> </a>
-      <a href="#/years/2020"> <span>2020</span> </a>
+      <a v-for="year in years" :href="'#/years/' + year.id">
+        <span>{{ year.id }}</span>
+      </a>
     </Slide>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Year } from '@/interfaces/year';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Slide } from 'vue-burger-menu';
 
 @Component({
@@ -17,16 +19,18 @@ import { Slide } from 'vue-burger-menu';
     Slide
   }
 })
-export default class Navigation extends Vue {}
+export default class Navigation extends Vue {
+  @Prop() private years!: Year[];
+}
 </script>
 
 <style lang="scss">
-  #navigation {
-    padding-bottom: 50px;
+#navigation {
+  padding-bottom: 50px;
 
-    h1 {
-      padding: 0;
-      margin: 0;
-    }
+  h1 {
+    padding: 0;
+    margin: 0;
   }
+}
 </style>

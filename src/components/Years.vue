@@ -1,6 +1,6 @@
 <template>
   <div id="years">
-    <Navigation></Navigation>
+    <Navigation v-bind:years="years"></Navigation>
     <YearSelector v-bind:years="years"></YearSelector>
   </div>
 </template>
