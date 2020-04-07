@@ -1,34 +1,10 @@
 <template>
-  <div id="app">
-    Hello World!
-    <router-view></router-view>
-    <!-- <YearPicker v-bind:years="years" />-->
-  </div>
+  <div id="app"><router-view></router-view></div>
 </template>
 
 <script lang="ts">
-import YearPicker from '@/components/YearPicker.vue';
-import { db } from '@/db';
-import { Component, Vue } from 'vue-property-decorator';
-import vSelect from 'vue-select';
+import { Vue } from 'vue-property-decorator';
 
-import 'firebase/firestore';
-
-Vue.component('v-select', vSelect);
-
-@Component({
-  data: () => {
-    return {
-      years: []
-    };
-  },
-  components: {
-    YearPicker
-  },
-  firestore: {
-    years: db.collection('years')
-  }
-})
 export default class App extends Vue {}
 </script>
 
