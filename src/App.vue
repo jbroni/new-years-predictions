@@ -1,5 +1,9 @@
 <template>
-  <div id="app"><YearPicker v-bind:years="years" /></div>
+  <div id="app">
+    Hello World!
+    <router-view></router-view>
+    <!-- <YearPicker v-bind:years="years" />-->
+  </div>
 </template>
 
 <script lang="ts">
