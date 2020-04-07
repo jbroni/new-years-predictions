@@ -2,18 +2,7 @@
   <div id="year-selector" v-if="years.length > 0">
     <div class="header">
       <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
-      <h1>Nyt&aring;rsforudsigelser for</h1>
-
-      <div class="picker-wrapper">
-        <v-select
-          v-model="selectedYear"
-          label="id"
-          :options="years"
-          :searchable="false"
-          :clearable="false"
-          class="picker"
-        ></v-select>
-      </div>
+      <h1>Nyt&aring;rsforudsigelser for {{ selectedYear.id }}</h1>
     </div>
 
     <Year v-bind:id="selectedYear.id" v-if="selectedYear" />
@@ -34,8 +23,18 @@ export default class YearSelector extends Vue {
   @Prop() private years!: Year[];
 
   @Watch('years') public onYearsChanged(): void {
+    this.updateYear();
+  }
+
+  @Watch('$route') public onRouteChanged(): void {
+    this.updateYear();
+  }
+
+  private updateYear(): void {
     if (this.years.length > 0) {
-      this.selectedYear = this.years[this.years.length - 1];
+      this.selectedYear =
+        this.years.find(year => year.id === this.$route.params.year) ||
+        this.years[this.years.length - 1];
     }
   }
 }
@@ -50,10 +49,5 @@ h1 {
 
 .header {
   padding-bottom: 20px;
-
-  .picker-wrapper {
-    display: flex;
-    justify-content: center;
-  }
 }
 </style>
