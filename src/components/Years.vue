@@ -1,9 +1,9 @@
 <template>
-  <div id="years"><YearPicker v-bind:years="years"></YearPicker></div>
+  <div id="years"><YearSelector v-bind:years="years"></YearSelector></div>
 </template>
 
 <script lang="ts">
-import YearPicker from '@/components/YearPicker.vue';
+import YearSelector from '@/components/YearSelector.vue';
 import { db } from '@/db';
 import { Component, Vue } from 'vue-property-decorator';
 import vSelect from 'vue-select';
@@ -19,7 +19,7 @@ Vue.component('v-select', vSelect);
     };
   },
   components: {
-    YearPicker
+    YearSelector
   },
   firestore: {
     years: db.collection('years')

@@ -1,5 +1,5 @@
 <template>
-  <div id="year-picker" v-if="years.length > 0">
+  <div id="year-selector" v-if="years.length > 0">
     <div class="header">
       <img alt="Krystalkugle" src="../assets/crystal-ball.png" />
       <h1>Nyt&aring;rsforudsigelser for</h1>
@@ -28,7 +28,7 @@ import YearComponent from './Year.vue';
 @Component({
   components: { Year: YearComponent }
 })
-export default class YearPicker extends Vue {
+export default class YearSelector extends Vue {
   public selectedYear: Year | null = null;
 
   @Prop() private years!: Year[];
