@@ -33,3 +33,12 @@ npm run build
 ```
 firebase deploy
 ```
+
+### Firebase Connection
+For the application to work it needs to have a firebase connection.
+
+A file describing the connection is assumed to be placed in `environments/firebase.ts`.
+
+Go to the project settings in Firebase and find the Firebase SDK snippet for Config.
+
+Copy this snippet into `environments/firebase.ts`.
