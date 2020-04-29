@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.150",
+    "chart.js": "^2.9.3",
     "firebase": "^7.14.2",
     "lodash": "^4.17.15",
     "vue": "^2.6.11",
@@ -22,6 +23,7 @@
     "vuefire": "^2.2.2"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.20",
     "@vue/cli-plugin-babel": "^4.3.1",
     "@vue/cli-plugin-typescript": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
