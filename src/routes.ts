@@ -1,4 +1,5 @@
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
 
 import AuthorizationError from '@/components/AuthorizationError.vue';
 import Years from '@/components/Years.vue';
