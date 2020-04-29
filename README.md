@@ -1,7 +1,9 @@
 # New Years Predictions
 _Note: Project is in Danish._
 
-Simple webapp to display results from a quiz attempting to predict the outcome of 25 events in 2019.
+Simple webapp to display results from a quiz attempting to predict the outcome of 25 events in 2019 and 2020.
+
+See https://new-years-predictions.web.app
 
 The main purpose of the project was to get a chance to play around with Vue and Firebase.
 As such there are many things that could definitely be improved upon like
