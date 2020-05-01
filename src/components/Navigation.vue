@@ -5,6 +5,8 @@
       <a v-for="year in years" :href="'#/years/' + year.id">
         <span>{{ year.id }}</span>
       </a>
+      <h1>Statistik</h1>
+      <a href="#/stats/"><span>Oversigt</span></a>
     </Slide>
   </div>
 </template>
