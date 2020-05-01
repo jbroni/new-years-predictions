@@ -16,12 +16,14 @@ import { db } from '@/db';
 import Chart from 'chart.js';
 import { Component, Vue } from 'vue-property-decorator';
 
+interface ParticipantScore {
+  name: string;
+  score: number;
+}
+
 interface YearlyTotal {
   label: string;
-  participants: {
-    name: string;
-    score: number;
-  }[];
+  participants: ParticipantScore[];
 }
 
 @Component({
@@ -90,7 +92,7 @@ export default class Stats extends Vue {
   private generateTotalPerYearChart(totalsByYear: YearlyTotal[]): void {
     const context = this.$refs.totalPerYearChart as HTMLCanvasElement;
 
-    new Chart(context, {
+    const totalPerYearChart = new Chart(context, {
       type: 'bar',
       data: generateChartData(totalsByYear),
       options: {
@@ -115,7 +117,7 @@ export default class Stats extends Vue {
   private generateTotalChart(totalsByYear: YearlyTotal[]): void {
     const context = this.$refs.totalChart as HTMLCanvasElement;
 
-    new Chart(context, {
+    const totalChart = new Chart(context, {
       type: 'bar',
       data: generateChartData(totalsByYear),
       options: {
