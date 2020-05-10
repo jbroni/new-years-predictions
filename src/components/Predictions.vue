@@ -19,7 +19,7 @@
           label="name"
           :options="participants"
           :searchable="false"
-          :on-change="participantChanged"
+          @input="participantChanged"
         ></v-select>
       </div>
 
