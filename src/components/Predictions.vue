@@ -139,7 +139,6 @@ export default class Predictions extends Vue {
 </script>
 
 <style lang="scss">
-.results-container,
 .scoreboard-container {
   display: flex;
   flex-direction: column;
@@ -157,6 +156,7 @@ export default class Predictions extends Vue {
   padding-bottom: 20px;
   width: 100%;
   max-width: 500px;
+  margin: 0 auto;
 }
 
 .participant-picker-label {
@@ -169,6 +169,7 @@ export default class Predictions extends Vue {
 
 table {
   border-spacing: 0;
+  margin: 0 auto;
 }
 
 th {
