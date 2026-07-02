@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
+import Admin from '@/components/Admin.vue';
 import AuthorizationError from '@/components/AuthorizationError.vue';
 import Stats from '@/components/Stats.vue';
 import Years from '@/components/Years.vue';
@@ -10,6 +11,7 @@ import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
 const routes = [
+  { path: '/admin', component: Admin },
   { path: '/years/:year', component: Years },
   { path: '/years/', component: Years },
   { path: '/stats/', component: Stats },
