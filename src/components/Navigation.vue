@@ -7,6 +7,8 @@
       </a>
       <h1>Statistik</h1>
       <a href="#/stats/"><span>Oversigt</span></a>
+      <h1>Admin</h1>
+      <a href="#/admin"><span>Admin</span></a>
     </Slide>
   </div>
 </template>
