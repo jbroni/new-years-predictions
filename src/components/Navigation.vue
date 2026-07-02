@@ -35,6 +35,28 @@ export default class Navigation extends Vue {
   h1 {
     padding: 0;
     margin: 0;
+    color: var(--color-gold);
   }
+
+  a {
+    color: var(--color-text) !important;
+
+    &:hover span {
+      color: var(--color-gold);
+    }
+  }
+}
+
+/* vue-burger-menu dark theme */
+.bm-menu {
+  background: var(--color-surface) !important;
+}
+
+.bm-burger-bars {
+  background-color: var(--color-text-muted) !important;
+}
+
+.bm-cross {
+  background: var(--color-text-muted) !important;
 }
 </style>

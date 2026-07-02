@@ -88,18 +88,26 @@ export default class Admin extends Vue {
 }
 
 .year-select {
-  padding: 8px;
+  padding: 8px 12px;
   font-size: 1em;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .logout-button {
   padding: 8px 16px;
   background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
   border-radius: 4px;
   font-size: 1em;
   cursor: pointer;
+
+  &:hover {
+    background: var(--color-surface-alt);
+  }
 }
 </style>
