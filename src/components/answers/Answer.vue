@@ -1,49 +1,31 @@
 <template>
-  <div class="answer">
-    <Correct v-if="isCorrect()" />
-    <UnknownNo v-if="isNo() && isUnknown()" />
-    <UnknownYes v-if="isYes() && isUnknown()" />
-    <Wrong v-if="isWrong()" />
+  <div class="answer" :class="stateClass">
+    <span v-if="icon" class="answer-icon">{{ icon }}</span>
+    <span class="answer-label">{{ label }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import Correct from '@/components/answers/Correct.vue';
-import UnknownNo from '@/components/answers/UnknownNo.vue';
-import UnknownYes from '@/components/answers/UnknownYes.vue';
-import Wrong from '@/components/answers/Wrong.vue';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component({
-  components: {
-    Correct,
-    UnknownNo,
-    UnknownYes,
-    Wrong
-  }
-})
+@Component
 export default class Answer extends Vue {
   @Prop() private answer!: boolean;
   @Prop() private outcome!: number;
 
-  private isUnknown(): boolean {
-    return this.outcome === -1;
+  get label(): string {
+    return this.answer ? 'Ja' : 'Nej';
   }
 
-  private isYes(): boolean {
-    return this.answer;
+  get icon(): string {
+    if (this.outcome === -1) { return ''; }
+    return this.answer ? (this.outcome === 1 ? '✓' : '✗') : (this.outcome === 0 ? '✓' : '✗');
   }
 
-  private isNo(): boolean {
-    return !this.answer;
-  }
-
-  private isCorrect(): boolean {
-    return this.isYes() ? this.outcome === 1 : this.outcome === 0;
-  }
-
-  private isWrong(): boolean {
-    return this.isYes() ? this.outcome === 0 : this.outcome === 1;
+  get stateClass(): string {
+    if (this.outcome === -1) { return 'unknown'; }
+    const correct = this.answer ? this.outcome === 1 : this.outcome === 0;
+    return correct ? 'correct' : 'wrong';
   }
 }
 </script>
@@ -53,10 +35,29 @@ div.answer {
   display: flex;
   align-items: center;
   justify-content: center;
-}
+  gap: 4px;
+  font-size: 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
 
-img.answer {
-  width: 25px;
-  height: 25px;
+  .answer-icon {
+    font-size: 1em;
+  }
+
+  .answer-label {
+    color: var(--color-text-muted);
+  }
+
+  &.correct .answer-icon {
+    color: var(--color-correct);
+  }
+
+  &.wrong .answer-icon {
+    color: var(--color-wrong);
+  }
+
+  &.unknown .answer-label {
+    color: var(--color-text-muted);
+  }
 }
 </style>

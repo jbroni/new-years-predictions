@@ -7,7 +7,7 @@
         <button
           v-for="option in outcomeOptions"
           :key="option.value"
-          :class="{ active: question.outcome === option.value }"
+          :class="{ active: question.outcome === option.value, [`outcome-${option.value}`]: true }"
           @click="setOutcome(question, option.value)"
         >
           {{ option.label }}
@@ -72,7 +72,7 @@ export default class AdminQuestions extends Vue {
   align-items: center;
   gap: 12px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--color-border);
 
   &:last-child {
     border-bottom: none;
@@ -84,6 +84,7 @@ export default class AdminQuestions extends Vue {
   min-width: 24px;
   text-align: right;
   flex-shrink: 0;
+  color: var(--color-text-muted);
 }
 
 .question-text {
@@ -98,16 +99,42 @@ export default class AdminQuestions extends Vue {
 
   button {
     padding: 4px 12px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border-strong);
     border-radius: 4px;
-    background: #fff;
+    background: var(--color-surface);
+    color: var(--color-text-muted);
     cursor: pointer;
     font-size: 0.9em;
+    transition: background 0.1s, color 0.1s, border-color 0.1s;
+
+    &:hover:not(.active) {
+      background: var(--color-surface-alt);
+      color: var(--color-text);
+    }
 
     &.active {
-      background: #333;
-      color: #fff;
-      border-color: #333;
+      font-weight: 700;
+    }
+
+    /* outcome === 1 → Ja → green */
+    &.outcome-1.active {
+      background: rgba(74, 222, 128, 0.2);
+      border-color: rgba(74, 222, 128, 0.5);
+      color: var(--color-correct);
+    }
+
+    /* outcome === 0 → Nej → red */
+    &.outcome-0.active {
+      background: rgba(248, 113, 113, 0.2);
+      border-color: rgba(248, 113, 113, 0.5);
+      color: var(--color-wrong);
+    }
+
+    /* outcome === -1 → Ukendt → muted */
+    &.outcome--1.active {
+      background: var(--color-surface-alt);
+      border-color: var(--color-border-strong);
+      color: var(--color-text);
     }
   }
 }

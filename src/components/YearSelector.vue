@@ -46,12 +46,20 @@ export default class YearSelector extends Vue {
 
 <style lang="scss">
 h1 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: -10px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin: 8px 0 0;
+  letter-spacing: -0.01em;
 }
 
 .header {
-  padding-bottom: 20px;
+  padding: 24px 16px 20px;
+
+  img {
+    filter: drop-shadow(0 0 8px rgba(245, 197, 24, 0.4));
+    width: 48px;
+    height: auto;
+  }
 }
 </style>
