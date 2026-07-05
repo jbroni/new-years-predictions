@@ -1,5 +1,5 @@
 <template>
-  <div id="stats">
+  <div id="stats" class="page">
     <Navigation v-bind:years="years"></Navigation>
     <h1>Statistik</h1>
 

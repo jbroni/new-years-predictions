@@ -10,11 +10,8 @@ import Navigation from '@/components/Navigation.vue';
 import YearSelector from '@/components/YearSelector.vue';
 import { db } from '@/db';
 import { Component, Vue } from 'vue-property-decorator';
-import vSelect from 'vue-select';
 
 import 'firebase/firestore';
-
-Vue.component('v-select', vSelect);
 
 @Component({
   data: () => {

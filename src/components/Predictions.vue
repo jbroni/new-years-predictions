@@ -1,105 +1,59 @@
 <template>
   <div class="predictions">
-    <div class="scoreboard-container">
-      <div class="scoreboard">
-        <div
-          v-for="(participant, index) in participantsSortedByBest"
-          :key="participant.id"
-          class="score-card"
-          :class="rankClass(index)"
-        >
-          <span class="rank">{{ index + 1 }}</span>
-          <span class="name">{{ participant.name }}</span>
-          <span class="score">{{ correctAnswers(participant) }}</span>
-        </div>
+    <div class="page-title">
+      <h1>Nyt&aring;rsforudsigelser</h1>
+      <div class="page-subtitle">{{ subtitle }}</div>
+    </div>
+
+    <div class="leaderboard">
+      <div
+        v-for="(participant, index) in participantsSortedByBest"
+        :key="participant.id"
+        class="lb-row"
+        :class="{ selected: isSelected(participant), leader: index === 0 }"
+        @click="participantChanged(participant)"
+      >
+        <span class="lb-rank">{{ index + 1 }}</span>
+        <span class="lb-name">{{ participant.name }}</span>
+        <span class="lb-bar-track">
+          <span
+            class="lb-bar-fill"
+            :style="{ width: percentCorrect(participant) + '%' }"
+          ></span>
+        </span>
+        <span class="lb-score">{{ correctAnswers(participant) }}</span>
+      </div>
+      <div class="lb-hint">Tryk p&aring; et navn for at se svarene</div>
+    </div>
+
+    <div v-if="selectedParticipant" class="answers-header">
+      <span class="answers-title">{{ possessive }} svar</span>
+      <span class="answers-total">{{ totalLine }}</span>
+    </div>
+
+    <div v-if="selectedParticipant" class="answers-table">
+      <div class="table-header-row">
+        <span></span> <span></span> <span class="col-label">UDFALD</span>
+        <span class="col-label col-answer-label">{{ selectedUpper }}</span>
+      </div>
+      <div
+        v-for="(question, index) in questions"
+        :key="index"
+        class="table-row"
+      >
+        <span class="q-num">{{ index + 1 }}</span>
+        <span class="q-text">{{ question.question }}</span>
+        <Outcome v-bind:outcome="question.outcome" />
+        <Answer
+          v-bind:outcome="question.outcome"
+          v-bind:answer="selectedParticipant.predictions[index]"
+        />
       </div>
     </div>
 
-    <div class="results-container">
-      <div class="participant-picker">
-        <span class="participant-picker-label">Vis svar for:</span>
-        <v-select
-          v-model="selectedParticipant"
-          label="name"
-          :options="participants"
-          :searchable="false"
-          :clearable="!isMobile"
-          @input="participantChanged"
-        ></v-select>
-      </div>
-
-      <!-- Mobile: card layout, single participant only -->
-      <div v-if="isMobile" class="question-list">
-        <div
-          v-for="(question, index) in questions"
-          :key="index"
-          class="question-item"
-          :class="mobileCellClass(question, mobileParticipant, index)"
-        >
-          <div class="question-item-left">
-            <span class="question-index">{{ index + 1 }}.</span>
-            <span class="question-item-text">{{ question.question }}</span>
-          </div>
-          <div class="question-item-right">
-            <Outcome v-bind:outcome="question.outcome" />
-            <Answer
-              v-if="mobileParticipant"
-              v-bind:outcome="question.outcome"
-              v-bind:answer="mobileParticipant.predictions[index]"
-            />
-          </div>
-        </div>
-        <div v-if="mobileParticipant" class="mobile-total">
-          {{ correctAnswers(mobileParticipant) }} / {{ determinedOutcome }} rigtige
-        </div>
-      </div>
-
-      <!-- Desktop: full table -->
-      <div v-else class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th class="col-index"></th>
-              <th class="col-question">Sp&oslash;rgsm&aring;l</th>
-              <th class="col-outcome">Udfald</th>
-              <th
-                v-for="participant in displayedParticipants"
-                :key="participant.id"
-                class="col-participant"
-              >
-                {{ participant.name }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(question, index) in questions" :key="index">
-              <td class="col-index index">{{ index + 1 }}.</td>
-              <td class="col-question question-text">{{ question.question }}</td>
-              <td class="col-outcome"><Outcome v-bind:outcome="question.outcome" /></td>
-              <td
-                v-for="participant in displayedParticipants"
-                :key="participant.id"
-                :class="['col-participant', answerCellClass(question, participant, index)]"
-              >
-                <Answer
-                  v-bind:outcome="question.outcome"
-                  v-bind:answer="participant.predictions[index]"
-                />
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr class="total">
-              <td></td>
-              <td></td>
-              <td class="result">{{ determinedOutcome }}</td>
-              <td v-for="participant in displayedParticipants" :key="participant.id" class="result">
-                {{ correctAnswers(participant) }}
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+    <div v-if="selectedParticipant" class="table-footer">
+      <span>{{ determinedOutcome }} af {{ questions.length }} afgjort</span>
+      <span class="footer-total">{{ totalLine }}</span>
     </div>
   </div>
 </template>
@@ -110,379 +64,298 @@ import Outcome from '@/components/outcomes/Outcome.vue';
 import { Participant } from '@/interfaces/participant';
 import { Question } from '@/interfaces/question';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { first, find, isEmpty } from 'lodash';
+import { find, first, isEmpty } from 'lodash';
 
 @Component({
   components: {
     Outcome,
-    Answer,
-  },
+    Answer
+  }
 })
 export default class Predictions extends Vue {
-
-  public get isMobile(): boolean {
-    return this.windowWidth < 640;
-  }
-
-  /** On mobile we always show exactly one participant. */
-  public get mobileParticipant(): Participant | null {
-    return this.selectedParticipant || first(this.participantsSortedByBest) || null;
-  }
-
-  public get displayedParticipants(): Participant[] {
-    return this.selectedParticipant ? [this.selectedParticipant] : this.participants;
-  }
-
   public get participantsSortedByBest(): Participant[] {
-    if (!this.participants) { return []; }
-    return [...this.participants].sort((a, b) => this.correctAnswers(b) - this.correctAnswers(a));
+    if (!this.participants) {
+      return [];
+    }
+    return [...this.participants].sort(
+      (a, b) => this.correctAnswers(b) - this.correctAnswers(a)
+    );
   }
 
   public get determinedOutcome(): number {
-    return this.questions ? this.questions.filter((q) => q.outcome !== -1).length : 0;
+    return this.questions
+      ? this.questions.filter(q => q.outcome !== -1).length
+      : 0;
   }
+
+  public get subtitle(): string {
+    const count = this.questions ? this.questions.length : 0;
+    return `${count} FORUDSIGELSER · ${this.determinedOutcome} AFGJORT`;
+  }
+
+  public get possessive(): string {
+    if (!this.selectedParticipant) {
+      return '';
+    }
+    const name = this.selectedParticipant.name;
+    return name.endsWith('s') ? `${name}’` : `${name}s`;
+  }
+
+  public get selectedUpper(): string {
+    return this.selectedParticipant
+      ? this.selectedParticipant.name.toUpperCase()
+      : '';
+  }
+
+  public get totalLine(): string {
+    if (!this.selectedParticipant) {
+      return '';
+    }
+    return `${this.correctAnswers(this.selectedParticipant)} af ${
+      this.determinedOutcome
+    } rigtige`;
+  }
+
   @Prop() private questions!: Question[];
   @Prop() private participants!: Participant[];
   private selectedParticipant: Participant | null = null;
   private selectedParticipantKey = 'selectedParticipant';
-  private windowWidth: number = window.innerWidth;
-
-  public mounted(): void {
-    window.addEventListener('resize', this.onResize);
-  }
-
-  public beforeDestroy(): void {
-    window.removeEventListener('resize', this.onResize);
-  }
 
   @Watch('participants') public onParticipantsChanged(): void {
     if (!this.selectedParticipant) {
-      const participantId = window.localStorage.getItem(this.selectedParticipantKey);
-      const participant = find(this.participants, { id: participantId }) as Participant | undefined;
-      this.selectedParticipant = participant || first(this.participants) || null;
+      const participantId = window.localStorage.getItem(
+        this.selectedParticipantKey
+      );
+      const participant = find(this.participants, { id: participantId }) as
+        | Participant
+        | undefined;
+      this.selectedParticipant =
+        participant || first(this.participantsSortedByBest) || null;
     }
   }
 
   public correctAnswers(participant: Participant): number {
-    if (isEmpty(this.questions)) { return 0; }
+    if (isEmpty(this.questions)) {
+      return 0;
+    }
     return participant.predictions.filter((prediction, index) =>
-      prediction ? this.questions[index].outcome === 1 : this.questions[index].outcome === 0,
+      prediction
+        ? this.questions[index].outcome === 1
+        : this.questions[index].outcome === 0
     ).length;
   }
 
-  public participantChanged(participant: Participant | undefined): void {
-    if (participant) {
-      window.localStorage.setItem(this.selectedParticipantKey, participant.id);
+  public percentCorrect(participant: Participant): number {
+    if (!this.determinedOutcome) {
+      return 0;
     }
-    this.selectedParticipant = participant || null;
+    return Math.round(
+      (this.correctAnswers(participant) / this.determinedOutcome) * 100
+    );
   }
 
-  public rankClass(index: number): string {
-    if (index === 0) { return 'rank-gold'; }
-    if (index === 1) { return 'rank-silver'; }
-    if (index === 2) { return 'rank-bronze'; }
-    return '';
+  public isSelected(participant: Participant): boolean {
+    return (
+      !!this.selectedParticipant &&
+      this.selectedParticipant.id === participant.id
+    );
   }
 
-  public answerCellClass(question: Question, participant: Participant, index: number): string {
-    if (question.outcome === -1) { return 'cell-unknown'; }
-    const prediction = participant.predictions[index];
-    const correct = prediction ? question.outcome === 1 : question.outcome === 0;
-    return correct ? 'cell-correct' : 'cell-wrong';
-  }
-
-  public mobileCellClass(question: Question, participant: Participant | null, index: number): string {
-    if (!participant || question.outcome === -1) { return 'cell-unknown'; }
-    const prediction = participant.predictions[index];
-    const correct = prediction ? question.outcome === 1 : question.outcome === 0;
-    return correct ? 'cell-correct' : 'cell-wrong';
-  }
-
-  private onResize(): void {
-    this.windowWidth = window.innerWidth;
+  public participantChanged(participant: Participant): void {
+    window.localStorage.setItem(this.selectedParticipantKey, participant.id);
+    this.selectedParticipant = participant;
   }
 }
 </script>
 
 <style lang="scss">
-.scoreboard-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 16px 28px;
-}
-
-.scoreboard {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  max-width: 420px;
-}
-
-.score-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-
-  .rank {
-    font-size: 0.85em;
-    font-weight: 700;
-    color: var(--color-text-muted);
-    min-width: 20px;
-    text-align: right;
-  }
-
-  .name {
-    flex: 1;
-    font-weight: 600;
-    text-align: left;
-  }
-
-  .score {
-    font-size: 1.1em;
-    font-weight: 700;
-    color: var(--color-text-muted);
-    min-width: 32px;
-    text-align: right;
-  }
-
-  &.rank-gold {
-    border-color: var(--color-gold);
-    background: linear-gradient(135deg, rgba(245, 197, 24, 0.12), var(--color-surface));
-
-    .rank { color: var(--color-gold); }
-    .score { color: var(--color-gold); }
-  }
-
-  &.rank-silver {
-    border-color: #94a3b8;
-    background: linear-gradient(135deg, rgba(148, 163, 184, 0.1), var(--color-surface));
-
-    .rank { color: #cbd5e1; }
-    .score { color: #cbd5e1; }
-  }
-
-  &.rank-bronze {
-    border-color: #cd7f32;
-    background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), var(--color-surface));
-
-    .rank { color: #cd7f32; }
-    .score { color: #cd7f32; }
-  }
-}
-
-.participant-picker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 16px 20px;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-.participant-picker-label {
-  padding-right: 12px;
-  font-size: 0.9em;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
-.participant-picker .dropdown.v-select {
-  flex: 1;
-}
-
-/* Mobile card layout */
-.question-list {
-  padding: 0 12px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.question-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-
-  &.cell-correct {
-    background: var(--color-correct-bg);
-    border-color: rgba(74, 222, 128, 0.25);
-  }
-
-  &.cell-wrong {
-    background: var(--color-wrong-bg);
-    border-color: rgba(248, 113, 113, 0.25);
-  }
-
-  &.cell-unknown {
-    background: var(--color-surface);
-  }
-}
-
-.question-item-left {
-  flex: 1;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  text-align: left;
-  min-width: 0;
-}
-
-.question-index {
-  font-size: 0.75em;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  flex-shrink: 0;
-}
-
-.question-item-text {
-  font-size: 0.9em;
-  line-height: 1.4;
-  word-break: break-word;
-}
-
-.question-item-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-.mobile-total {
-  margin-top: 4px;
-  padding: 10px 14px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 0.9em;
-  color: var(--color-text);
+.page-title {
   text-align: center;
+  padding: 28px 0 8px;
+  border-bottom: 2px solid var(--color-border-strong);
 }
 
-/* Desktop table layout */
-.table-wrapper {
-  overflow-x: auto;
-  padding: 0 16px 32px;
-  -webkit-overflow-scrolling: touch;
+.page-title h1 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.01em;
 }
 
-table {
-  border-spacing: 0;
-  margin: 0 auto;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-thead th {
-  border-bottom: 1px solid var(--color-border-strong);
-  padding: 8px 10px;
-  font-size: 0.8em;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.page-subtitle {
+  font-size: 12px;
+  letter-spacing: 0.22em;
   color: var(--color-text-muted);
-  white-space: nowrap;
+  margin-top: 8px;
 }
 
-tbody tr {
-  border-bottom: 1px solid var(--color-border);
+.leaderboard {
+  padding: 18px 0 6px;
+}
 
-  &:nth-child(even) {
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  margin: 0 -10px;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
     background: var(--color-surface-alt);
   }
 
-  &:nth-child(odd) {
-    background: var(--color-surface);
+  &.selected {
+    background: var(--color-gold-dim);
+
+    &:hover {
+      background: var(--color-gold-dim);
+    }
   }
 }
 
-td {
-  padding: 8px 10px;
-  vertical-align: middle;
-}
-
-.col-index {
-  width: 28px;
-  min-width: 28px;
-}
-
-.col-question {
-  min-width: 180px;
-  text-align: left;
-}
-
-.col-outcome {
-  width: 60px;
-  min-width: 60px;
-}
-
-.col-participant {
-  width: 80px;
-  min-width: 70px;
-}
-
-.index {
+.lb-rank {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  width: 16px;
   text-align: right;
+  color: var(--color-text-faint);
+
+  .lb-row.leader & {
+    color: var(--color-gold);
+  }
+}
+
+.lb-name {
+  font-size: 15px;
+  font-weight: 500;
+  min-width: 76px;
+
+  .lb-row.selected & {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+  }
+}
+
+.lb-bar-track {
+  flex: 1;
+  display: block;
+  height: 3px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 4px;
+}
+
+.lb-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--color-text-faint);
+
+  .lb-row.leader & {
+    background: var(--color-gold);
+  }
+}
+
+.lb-score {
+  font-size: 15px;
   font-weight: 600;
-  font-size: 0.8em;
+  font-variant-numeric: tabular-nums;
+  width: 22px;
+  text-align: right;
+  color: var(--color-text);
+
+  .lb-row.leader & {
+    color: var(--color-gold);
+  }
+}
+
+.lb-hint {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  padding: 8px 2px 0;
+  text-align: center;
+}
+
+.answers-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 26px 0 2px;
+}
+
+.answers-title {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 500;
+}
+
+.answers-total {
+  font-size: 13px;
   color: var(--color-text-muted);
 }
 
-.question-text {
-  font-size: 0.9em;
-  line-height: 1.4;
+.table-header-row,
+.table-row {
+  display: grid;
+  grid-template-columns: 22px 1fr 52px 58px;
+  gap: 0 10px;
+  align-items: baseline;
 }
 
-.cell-correct {
-  background: var(--color-correct-bg) !important;
+.table-header-row {
+  padding: 10px 0 6px;
 }
 
-.cell-wrong {
-  background: var(--color-wrong-bg) !important;
+.col-label {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--color-text-muted);
 }
 
-.cell-unknown {
-  background: var(--color-unknown-bg) !important;
+.col-answer-label {
+  text-align: right;
 }
 
-tfoot tr.total {
-  font-weight: 700;
-  font-size: 0.9em;
+.table-row {
+  padding: 9px 0;
+  border-top: 1px solid var(--color-border);
+}
 
-  td {
-    padding-top: 10px;
-    border-top: 1px solid var(--color-border-strong);
+.q-num {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.q-text {
+  font-size: 14.5px;
+  line-height: 1.45;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.table-footer {
+  border-top: 2px solid var(--color-border-strong);
+  margin-top: 2px;
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+
+  span:first-child {
     color: var(--color-text-muted);
   }
 
-  .result {
-    color: var(--color-text);
-  }
-}
-
-@media (max-width: 640px) {
-  .participant-picker {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    padding-bottom: 16px;
-
-    .participant-picker-label {
-      padding-right: 0;
-    }
+  .footer-total {
+    font-weight: 600;
   }
 }
 </style>

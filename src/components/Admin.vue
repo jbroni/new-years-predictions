@@ -1,5 +1,5 @@
 <template>
-  <div id="admin">
+  <div id="admin" class="page">
     <Navigation :years="years" />
     <div v-if="!isEmailUser" class="admin-content">
       <AdminLogin />
