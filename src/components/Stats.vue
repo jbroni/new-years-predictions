@@ -1,6 +1,6 @@
 <template>
-  <div id="stats">
-    <Navigation v-bind:years="years"></Navigation>
+  <div id="stats" class="page">
+    <TopBar v-bind:years="years" />
     <h1>Statistik</h1>
 
     <canvas ref="totalPerYearChart"></canvas> <canvas ref="totalChart"></canvas>
@@ -11,7 +11,7 @@
 import * as palette from 'google-palette';
 import { uniq } from 'lodash';
 
-import Navigation from '@/components/Navigation.vue';
+import TopBar from '@/components/TopBar.vue';
 import { db } from '@/db';
 import Chart from 'chart.js';
 import { Component, Vue } from 'vue-property-decorator';
@@ -32,7 +32,7 @@ interface YearlyTotal {
       years: []
     };
   },
-  components: { Navigation },
+  components: { TopBar },
   firestore: {
     years: db.collection('years')
   }

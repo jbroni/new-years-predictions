@@ -20,7 +20,7 @@ export default class AdminLogin extends Vue {
   private loading: boolean = false;
 
   public async mounted(): Promise<void> {
-    if (!isMobile) return;
+    if (!isMobile) { return; }
     this.loading = true;
     try {
       const result = await firebase.auth().getRedirectResult();

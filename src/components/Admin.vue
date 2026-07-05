@@ -1,6 +1,6 @@
 <template>
-  <div id="admin">
-    <Navigation :years="years" />
+  <div id="admin" class="page">
+    <TopBar :years="years" />
     <div v-if="!isEmailUser" class="admin-content">
       <AdminLogin />
     </div>
@@ -27,7 +27,7 @@ import 'firebase/firestore';
 
 import AdminLogin from '@/components/admin/AdminLogin.vue';
 import AdminQuestions from '@/components/admin/AdminQuestions.vue';
-import Navigation from '@/components/Navigation.vue';
+import TopBar from '@/components/TopBar.vue';
 import { db } from '@/db';
 import { Year } from '@/interfaces/year';
 import { Component, Vue } from 'vue-property-decorator';
@@ -41,7 +41,7 @@ import { Component, Vue } from 'vue-property-decorator';
     };
   },
   components: {
-    Navigation,
+    TopBar,
     AdminLogin,
     AdminQuestions
   },

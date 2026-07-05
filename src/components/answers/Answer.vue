@@ -1,8 +1,5 @@
 <template>
-  <div class="answer" :class="stateClass">
-    <span v-if="icon" class="answer-icon">{{ icon }}</span>
-    <span class="answer-label">{{ label }}</span>
-  </div>
+  <span class="answer" :class="stateClass">{{ label }}</span>
 </template>
 
 <script lang="ts">
@@ -14,16 +11,18 @@ export default class Answer extends Vue {
   @Prop() private outcome!: number;
 
   get label(): string {
-    return this.answer ? 'Ja' : 'Nej';
-  }
-
-  get icon(): string {
-    if (this.outcome === -1) { return ''; }
-    return this.answer ? (this.outcome === 1 ? '✓' : '✗') : (this.outcome === 0 ? '✓' : '✗');
+    const base = this.answer ? 'Ja' : 'Nej';
+    if (this.outcome === -1) {
+      return base;
+    }
+    const correct = this.answer ? this.outcome === 1 : this.outcome === 0;
+    return `${base} ${correct ? '✓' : '✗'}`;
   }
 
   get stateClass(): string {
-    if (this.outcome === -1) { return 'unknown'; }
+    if (this.outcome === -1) {
+      return 'unknown';
+    }
     const correct = this.answer ? this.outcome === 1 : this.outcome === 0;
     return correct ? 'correct' : 'wrong';
   }
@@ -31,33 +30,23 @@ export default class Answer extends Vue {
 </script>
 
 <style lang="scss">
-div.answer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 0.85em;
+.answer {
+  font-size: 13.5px;
   font-weight: 600;
+  text-align: right;
   white-space: nowrap;
 
-  .answer-icon {
-    font-size: 1em;
-  }
-
-  .answer-label {
+  &.unknown {
     color: var(--color-text-muted);
+    font-weight: 500;
   }
 
-  &.correct .answer-icon {
+  &.correct {
     color: var(--color-correct);
   }
 
-  &.wrong .answer-icon {
+  &.wrong {
     color: var(--color-wrong);
-  }
-
-  &.unknown .answer-label {
-    color: var(--color-text-muted);
   }
 }
 </style>
