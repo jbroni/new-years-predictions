@@ -2,7 +2,8 @@
   <div class="top-bar">
     <div class="year-picker" v-if="years && years.length">
       <span class="year-picker-label" @click="toggleMenu">
-        ÅR: {{ currentYearId }} <span class="caret">▾</span>
+        {{ currentYearId ? `ÅR: ${currentYearId}` : 'ÅR' }}
+        <span class="caret">▾</span>
       </span>
       <div class="year-menu" v-if="menuOpen">
         <div
