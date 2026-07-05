@@ -12,23 +12,47 @@ import 'firebase/auth';
 import { adminEmail } from '../../../environments/firebase';
 import { Component, Vue } from 'vue-property-decorator';
 
+const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 @Component
 export default class AdminLogin extends Vue {
   private error: string = '';
   private loading: boolean = false;
 
-  public async login(): Promise<void> {
-    this.error = '';
+  public async mounted(): Promise<void> {
+    if (!isMobile) return;
     this.loading = true;
     try {
-      const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      if (result.user?.email !== adminEmail) {
-        await firebase.auth().signOut();
-        this.error = 'Ingen adgang.';
+      const result = await firebase.auth().getRedirectResult();
+      if (result.user) {
+        if (result.user.email !== adminEmail) {
+          await firebase.auth().signOut();
+          this.error = 'Ingen adgang.';
+        }
       }
     } catch (e: any) {
       this.error = e.message;
     } finally {
+      this.loading = false;
+    }
+  }
+
+  public async login(): Promise<void> {
+    this.error = '';
+    this.loading = true;
+    const provider = new firebase.auth.GoogleAuthProvider();
+    try {
+      if (isMobile) {
+        await firebase.auth().signInWithRedirect(provider);
+      } else {
+        const result = await firebase.auth().signInWithPopup(provider);
+        if (result.user?.email !== adminEmail) {
+          await firebase.auth().signOut();
+          this.error = 'Ingen adgang.';
+        }
+      }
+    } catch (e: any) {
+      this.error = e.message;
       this.loading = false;
     }
   }
