@@ -52,6 +52,13 @@ export default class Navigation extends Vue {
   background: var(--color-surface) !important;
 }
 
+.bm-burger-button {
+  width: 22px !important;
+  height: 18px !important;
+  top: 18px !important;
+  left: 18px !important;
+}
+
 .bm-burger-bars {
   background-color: var(--color-text-muted) !important;
 }
