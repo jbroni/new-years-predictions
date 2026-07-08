@@ -1,9 +1,7 @@
 <template>
   <div id="admin" class="page">
     <TopBar :years="years" />
-    <div v-if="!isEmailUser" class="admin-content">
-      <AdminLogin />
-    </div>
+    <div v-if="!isEmailUser" class="admin-content"><AdminLogin /></div>
     <div v-else class="admin-content">
       <h1>Admin</h1>
       <div class="admin-controls">

@@ -162,8 +162,7 @@ export default class Predictions extends Vue {
       return 0;
     }
     return participant.predictions.filter(
-      (prediction, index) =>
-        prediction && this.questions[index].outcome === 1
+      (prediction, index) => prediction && this.questions[index].outcome === 1
     ).length;
   }
 

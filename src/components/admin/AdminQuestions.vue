@@ -1,13 +1,20 @@
 <template>
   <div class="admin-questions">
-    <div v-for="(question, index) in questions" :key="question.id" class="question-row">
+    <div
+      v-for="(question, index) in questions"
+      :key="question.id"
+      class="question-row"
+    >
       <span class="question-index">{{ index + 1 }}.</span>
       <span class="question-text">{{ question.question }}</span>
       <div class="outcome-buttons">
         <button
           v-for="option in outcomeOptions"
           :key="option.value"
-          :class="{ active: question.outcome === option.value, [`outcome-${option.value}`]: true }"
+          :class="{
+            active: question.outcome === option.value,
+            [`outcome-${option.value}`]: true
+          }"
           @click="setOutcome(question, option.value)"
         >
           {{ option.label }}
