@@ -129,7 +129,8 @@ export default class Predictions extends Vue {
   private selectedParticipant: Participant | null = null;
   private selectedParticipantKey = 'selectedParticipant';
 
-  @Watch('participants') public onParticipantsChanged(): void {
+  @Watch('participants', { immediate: true })
+  public onParticipantsChanged(): void {
     if (!this.selectedParticipant) {
       const participantId = window.localStorage.getItem(
         this.selectedParticipantKey
