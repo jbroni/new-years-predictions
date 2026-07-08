@@ -77,9 +77,17 @@ export default class Predictions extends Vue {
     if (!this.participants) {
       return [];
     }
-    return [...this.participants].sort(
-      (a, b) => this.correctAnswers(b) - this.correctAnswers(a)
-    );
+    return [...this.participants].sort((a, b) => {
+      const correctDiff = this.correctAnswers(b) - this.correctAnswers(a);
+      if (correctDiff !== 0) {
+        return correctDiff;
+      }
+      const yesDiff = this.yesPredictions(b) - this.yesPredictions(a);
+      if (yesDiff !== 0) {
+        return yesDiff;
+      }
+      return this.correctYesAnswers(b) - this.correctYesAnswers(a);
+    });
   }
 
   public get determinedOutcome(): number {
@@ -142,6 +150,20 @@ export default class Predictions extends Vue {
       prediction
         ? this.questions[index].outcome === 1
         : this.questions[index].outcome === 0
+    ).length;
+  }
+
+  public yesPredictions(participant: Participant): number {
+    return participant.predictions.filter(prediction => prediction).length;
+  }
+
+  public correctYesAnswers(participant: Participant): number {
+    if (isEmpty(this.questions)) {
+      return 0;
+    }
+    return participant.predictions.filter(
+      (prediction, index) =>
+        prediction && this.questions[index].outcome === 1
     ).length;
   }
 
