@@ -25,7 +25,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import AdminLogin from '@/components/admin/AdminLogin.vue';
+import AdminLogin, { redirectMarker } from '@/components/admin/AdminLogin.vue';
 import AdminQuestions from '@/components/admin/AdminQuestions.vue';
 import TopBar from '@/components/TopBar.vue';
 import { db } from '@/db';
@@ -70,6 +70,9 @@ export default class Admin extends Vue {
         return;
       }
       this.isEmailUser = !!(user && user.email);
+      if (this.isEmailUser) {
+        sessionStorage.removeItem(redirectMarker);
+      }
     });
   }
 
