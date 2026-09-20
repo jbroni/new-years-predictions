@@ -1,7 +1,9 @@
 <template>
   <div id="admin" class="page">
     <TopBar :years="years" />
-    <div v-if="!isEmailUser" class="admin-content"><AdminLogin /></div>
+    <div v-if="!isEmailUser" class="admin-content">
+      <AdminLogin :loginError="loginError" />
+    </div>
     <div v-else class="admin-content">
       <h1>Admin</h1>
       <div class="admin-controls">
@@ -28,6 +30,7 @@ import AdminQuestions from '@/components/admin/AdminQuestions.vue';
 import TopBar from '@/components/TopBar.vue';
 import { db } from '@/db';
 import { Year } from '@/interfaces/year';
+import { adminEmail } from '../../environments/firebase';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -35,6 +38,7 @@ import { Component, Vue } from 'vue-property-decorator';
     return {
       years: [],
       isEmailUser: false,
+      loginError: '',
       selectedYearId: ''
     };
   },
@@ -50,11 +54,21 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class Admin extends Vue {
   private years!: Year[];
   private isEmailUser!: boolean;
+  private loginError!: string;
   private selectedYearId!: string;
   private unsubscribeAuth: (() => void) | null = null;
 
   public created(): void {
-    this.unsubscribeAuth = firebase.auth().onAuthStateChanged(user => {
+    this.unsubscribeAuth = firebase.auth().onAuthStateChanged(async user => {
+      if (user && user.email && user.email !== adminEmail) {
+        // Signed in with a Google account that is not the admin - drop it and
+        // go back to the anonymous user the rest of the app runs as.
+        this.isEmailUser = false;
+        this.loginError = 'Ingen adgang.';
+        await firebase.auth().signOut();
+        await firebase.auth().signInAnonymously();
+        return;
+      }
       this.isEmailUser = !!(user && user.email);
     });
   }

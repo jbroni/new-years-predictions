@@ -1,7 +1,7 @@
 <template>
   <div class="admin-login">
     <h1>Admin login</h1>
-    <p v-if="error" class="error">{{ error }}</p>
+    <p v-if="error || loginError" class="error">{{ error || loginError }}</p>
     <button :disabled="loading" @click="login">Log ind med Google</button>
   </div>
 </template>
@@ -9,31 +9,24 @@
 <script lang="ts">
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
-import { adminEmail } from '../../../environments/firebase';
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 @Component
 export default class AdminLogin extends Vue {
+  @Prop({ default: '' }) private loginError!: string;
+
   private error: string = '';
   private loading: boolean = false;
 
   public async mounted(): Promise<void> {
-    if (!isMobile) { return; }
-    this.loading = true;
+    // A successful redirect sign-in is picked up by the auth state listener in
+    // Admin.vue; this only surfaces errors from a failed redirect attempt.
     try {
-      const result = await firebase.auth().getRedirectResult();
-      if (result.user) {
-        if (result.user.email !== adminEmail) {
-          await firebase.auth().signOut();
-          this.error = 'Ingen adgang.';
-        }
-      }
-    } catch (e: any) {
-      this.error = e.message;
-    } finally {
-      this.loading = false;
+      await firebase.auth().getRedirectResult();
+    } catch (e) {
+      this.error = (e as Error).message;
     }
   }
 
@@ -45,14 +38,10 @@ export default class AdminLogin extends Vue {
       if (isMobile) {
         await firebase.auth().signInWithRedirect(provider);
       } else {
-        const result = await firebase.auth().signInWithPopup(provider);
-        if (result.user?.email !== adminEmail) {
-          await firebase.auth().signOut();
-          this.error = 'Ingen adgang.';
-        }
+        await firebase.auth().signInWithPopup(provider);
       }
-    } catch (e: any) {
-      this.error = e.message;
+    } catch (e) {
+      this.error = (e as Error).message;
       this.loading = false;
     }
   }
